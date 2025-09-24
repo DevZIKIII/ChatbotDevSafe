@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevBot - Seu Assistente de Código</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                 <img src="assets/avatar_bot.png" alt="DevBot Logo" class="logo-icon">
+                <span>DevBot</span>
+            </div>
+            <button class="new-chat-btn" onclick="newChat()">
+                <span>➕</span> Nova Conversa
+            </button>
+        </div>
+        <div class="chat-history" id="chatHistory">
+            </div>
+        <div class="sidebar-footer">
+            <div id="userInfo" class="user-info">
+                </div>
+            <button class="settings-btn" id="settings-btn" onclick="openSettings()">
+                <span>⚙️</span> Configurações
+            </button>
+            <button class="logout-btn" onclick="showLogoutConfirm()">
+                <span>🚪</span> Sair
+            </button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header class="chat-header">
+            <div class="header-info">
+                <div class="status-indicator"></div>
+                <div id="modelInfo">
+                    <span class="model-badge">Gemini-2.0-Flash</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="chat-messages" id="chatMessages">
+            </div>
+        
+        <div class="thinking-indicator" id="thinkingIndicator">
+            <div class="neural-thinking">
+                <div class="neural-nodes">
+                    <div class="neural-node-thinking"></div>
+                    <div class="neural-node-thinking"></div>
+                    <div class="neural-node-thinking"></div>
+                </div>
+                <span class="thinking-text">DevBot está pensando...</span>
+            </div>
+        </div>
+
+
+        <footer class="input-container">
+            <div class="input-wrapper">
+            <input type="file" id="fileInput" accept=".txt,.js,.py,.html,.css,.json,.md" style="display: none;" multiple>
+                <div id="attachedFilesList" class="attached-files-list"></div>
+                <button class="action-btn" onclick="document.getElementById('fileInput').click()" title="Anexar arquivo">📎</button>
+                <textarea 
+                    id="messageInput" 
+                    placeholder="Converse com o DevBot" 
+                    rows="1" 
+                    oninput="adjustTextareaHeight(this)"
+                    onkeydown="handleKeyPress(event)"
+                ></textarea>
+                <button class="action-btn" id="sendButton" onclick="sendMessage()" title="Enviar Mensagem">
+                    <span>➤</span>
+                </button>
+            </div>
+            <div class="shortcuts-hint">
+                <div class="shortcut">
+                    <span class="key">Enter</span> Enviar
+                </div>
+                <div class="shortcut">
+                    <span class="key">Shift</span>+<span class="key">Enter</span> Pular Linha
+                </div>
+                <div class="shortcut">
+                    <span class="key">Ctrl</span>+<span class="key">D</span> Deletar Conversa
+                </div>
+                <div class="shortcut">
+                    <span class="key">Ctrl</span>+<span class="key">Q</span> Sair
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="api-modal" id="apiModal">
+    <div class="modal-content">
+        <button class="close-modal-btn" onclick="closeApiModal()">×</button>
+        
+        <div class="modal-header">
+            <h2>Configurar API Key</h2>
+            <p>Para começar, insira sua API Key do Google Gemini...</p>
+        </div>
+            <input type="password" id="apiKeyInput" class="modal-input" placeholder="Cole sua API Key aqui...">
+            <div class="modal-actions">
+                <button class="modal-btn" onclick="skipApiKey()">Pular</button>
+                <button class="modal-btn primary" onclick="saveApiKey()">Salvar e Começar</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="confirm-modal" id="confirmModal">
+        <div class="confirm-content">
+            <h3 class="confirm-title">Confirmar Exclusão</h3>
+            <p class="confirm-message">Você tem certeza que deseja excluir esta conversa? Esta ação não pode ser desfeita.</p>
+            <div class="confirm-buttons">
+                <button class="confirm-btn cancel" onclick="cancelDelete()">Cancelar</button>
+                <button class="confirm-btn delete" onclick="confirmDelete()">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="logout-modal" id="logoutModal">
+        <div class="logout-content">
+            <h3 class="logout-title">Confirmar Saída</h3>
+            <p class="logout-message">Você tem certeza que deseja encerrar a sessão?</p>
+            <div class="logout-buttons">
+                <button class="logout-btn-modal stay" onclick="cancelLogout()">Ficar</button>
+                <button class="logout-btn-modal leave" onclick="confirmLogout()">Sair</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="main.js"></script>
+</body>
+</html>
